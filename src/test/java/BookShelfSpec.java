@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("<= BookShelf Specification =>")
@@ -44,5 +45,23 @@ class BookShelfSpec
 
     boolean isEven(int number) {
         return number % 2 == 0;
+    }
+
+    @Test
+    public void shelfToStringShouldPrintBookCountAndTitles() throws Exception {
+        BookShelf shelf = new BookShelf();
+        List<String> books = shelf.books();
+        books.add("The Phoenix Project");
+        books.add("Java 8 in Action");
+        String shelfStr = shelf.toString();
+
+        assertAll( ()  -> assertTrue(shelfStr.contains("The Phoenix Project"),  "1st book title missing"),
+                () -> assertTrue(shelfStr.contains("Java 8 in Action") , "2nd book title missing "),
+                () -> assertTrue(shelfStr.contains("2 books found"), "Book  count missing"));
+
+
+//        assertTrue(shelfStr.contains("The Phoenix Project"),  "1st book title missing");
+//        assertTrue(shelfStr.contains("Java 8 in Action") , "2nd book title missing ");
+//        assertTrue(shelfStr.contains("2 books found"), "Book  count missing");
     }
 }

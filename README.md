@@ -3,3 +3,4 @@ In the previous section, we discussed that test methods are no longer required t
 Tests in JUnit 5 must be annotated with org.junit.jupiter.api.Test annotation. This is different from the annotation used in JUnit 4.
 As with test class constructors , test methods can also take parameters in JUnit 5.
 Another thing to note here is that JUnit 5 changed the order of message parameter. In JUnit 4, the message used to be the first argument, but in JUnit 5 message it is the last argument. 
+assertAll() lists all of the individual failed assertions
