@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BookShelfSpec
 {
-
     private BookShelfSpec(TestInfo testInfo) {
+        /*
+        This constructor is private
+         */
         System.out.println("Working on test " + testInfo.getDisplayName());
     }
 
