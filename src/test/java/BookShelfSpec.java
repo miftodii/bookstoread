@@ -1,10 +1,12 @@
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@DisplayName("<= BookShelf Specification =>")
 class BookShelfSpec
 {
     private BookShelfSpec(TestInfo testInfo) {
