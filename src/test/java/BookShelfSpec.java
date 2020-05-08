@@ -4,6 +4,10 @@ import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -63,5 +67,26 @@ class BookShelfSpec
 //        assertTrue(shelfStr.contains("The Phoenix Project"),  "1st book title missing");
 //        assertTrue(shelfStr.contains("Java 8 in Action") , "2nd book title missing ");
 //        assertTrue(shelfStr.contains("2 books found"), "Book  count missing");
+    }
+
+    @BeforeAll
+    static void connectDBConnectionPool() {
+    }
+
+    @BeforeEach
+    void initializeBookShelfWithDatabase() {
+    }
+
+    @Test
+    void shouldGiveBackAllBooksInShelf() {
+        // Check books in shelf
+    }
+
+    @AfterEach
+    void deleteShelfFromDB() {
+    }
+
+    @AfterAll
+    static void closeDBConnectionPool() {
     }
 }
