@@ -17,7 +17,8 @@ class BookShelfSpec
     }
 
     @Test
-    void shelfEmptyWhenNoBookAdded(TestInfo testInfo) {
+    @DisplayName("is empty when no book is added to it")
+    void shelf_empty_when_no_book_added(TestInfo testInfo) {
         System.out.println("Working on test case " + testInfo.getDisplayName());
         BookShelf shelf = new BookShelf();
         List<String> books = shelf.books();
