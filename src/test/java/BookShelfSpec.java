@@ -13,80 +13,49 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @DisplayName("<= BookShelf Specification =>")
 class BookShelfSpec
 {
-    private BookShelfSpec(TestInfo testInfo) {
-        /*
-        This constructor is private
-         */
-        System.out.println("Working on test " + testInfo.getDisplayName());
-    }
-
-    @Test
-    @DisplayName("is empty when no book is added to it")
-    void shelf_empty_when_no_book_added(TestInfo testInfo) {
-        System.out.println("Working on test case " + testInfo.getDisplayName());
-        BookShelf shelf = new BookShelf();
-        List<String> books = shelf.books();
-        assertTrue(books.isEmpty(), "BookShelf should be empty.");
-    }
-
-    @Test
-    void shouldCheckForEvenNumbers() {
-        int number = new Random(10).nextInt();
-        assertTrue(() -> number%2 == 0, number+ " is not an even number.");
-
-        BiFunction<Integer, Integer, Boolean> divisible = (x, y) -> x % y == 0;
-        Function<Integer, Boolean> multipleOf2 = (x) -> divisible.apply(x, 2);
-        assertTrue(() -> multipleOf2.apply(number), () -> " 2 is not factor of " + number);
-
-        List<Integer> numbers = Arrays.asList(1, 1, 1, 1, 2);
-        assertTrue(() -> numbers.stream().distinct().anyMatch(this::isEven), "Did not find an even number in the list");
-    }
-
-    boolean isEven(int number) {
-        return number % 2 == 0;
-    }
-
-    @Test
-    public void shelfToStringShouldPrintBookCountAndTitles() throws Exception {
-        BookShelf shelf = new BookShelf();
-        List<String> books = shelf.books();
-        books.add("The Phoenix Project");
-        books.add("Java 8 in Action");
-        String shelfStr = shelf.toString();
-
-        assertAll( ()  -> assertTrue(shelfStr.contains("The Phoenix Project"),  "1st book title missing"),
-                () -> assertTrue(shelfStr.contains("Java 8 in Action") , "2nd book title missing "),
-                () -> assertTrue(shelfStr.contains("2 books found"), "Book  count missing"));
-
-
-//        assertTrue(shelfStr.contains("The Phoenix Project"),  "1st book title missing");
-//        assertTrue(shelfStr.contains("Java 8 in Action") , "2nd book title missing ");
-//        assertTrue(shelfStr.contains("2 books found"), "Book  count missing");
-    }
-
-    @BeforeAll
-    static void connectDBConnectionPool() {
-    }
+    private BookShelf shelf;
 
     @BeforeEach
-    void initializeBookShelfWithDatabase() {
+    void init() throws Exception {
+        shelf = new BookShelf();
     }
 
     @Test
-    void shouldGiveBackAllBooksInShelf() {
-        // Check books in shelf
+    public void emptyBookShelfWhenNoBookAdded() {
+        List<String> books = shelf.books();
+        assertTrue(books.isEmpty(), () -> "BookShelf should be empty.");
     }
 
-    @AfterEach
-    void deleteShelfFromDB() {
+    @Test
+    void bookshelfContainsTwoBooksWhenTwoBooksAdded() {
+        shelf.add("Effective Java", "Code Complete");
+        List<String> books = shelf.books();
+        assertEquals(2, books.size(), () -> "BookShelf should have two books.");
     }
 
-    @AfterAll
-    static void closeDBConnectionPool() {
+    @Test
+    public void emptyBookShelfWhenAddIsCalledWithoutBooks() {
+        shelf.add();
+        List<String> books = shelf.books();
+        assertTrue(books.isEmpty(), () -> "BookShelf should be empty.");
+    }
+
+    @Test
+    void booksReturnedFromBookShelfIsImmutableForClient() {
+        shelf.add("Effective Java", "Code Complete");
+        List<String> books = shelf.books();
+        try {
+            books.add("The Mythical Man-Month");
+            fail(() -> "Should not be able to add book to books");
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException, () -> "Should throw UnsupportedOperationException.");
+        }
     }
 }
