@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
@@ -60,6 +61,7 @@ class BookShelfSpec
         }
     }
 
+    @Disabled("Needs to implement Comparator")
     @Test
     void bookshelfArrangedByBookTitle() {
         shelf.add(effectiveJava, codeComplete, mythicalManMonth);
