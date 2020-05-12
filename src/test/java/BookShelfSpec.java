@@ -58,4 +58,21 @@ class BookShelfSpec
             assertTrue(e instanceof UnsupportedOperationException, () -> "Should throw UnsupportedOperationException.");
         }
     }
+
+    @Test
+    void bookshelfArrangedByBookTitle() {
+        BookShelf shelf = new BookShelf();
+        shelf.add("Effective Java", "Code Complete","The Mythical Man-Month" );
+        List<String> books = shelf.arrange();
+        assertEquals(Arrays.asList( "Code Complete", "Effective Java", "The Mythical Man-Month"), books, () -> "Books in a bookshelf should be arranged lexicographically by book title");
+    }
+
+    @Test
+    void booksInBookShelfAreInInsertionOrderAfterCallingArrange() {
+        BookShelf shelf = new BookShelf();
+        shelf.add("Effective Java", "Code Complete", "The Mythical Man-Month");
+        shelf.arrange();
+        List<String> books = shelf.books();
+        assertEquals(Arrays.asList("Effective Java", "Code Complete", "The Mythical Man-Month"), books, () -> "Books in bookshelf are in insertion order");
+    }
 }
