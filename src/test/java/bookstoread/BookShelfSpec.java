@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -80,10 +81,8 @@ class BookShelfSpec
     @Test
     void bookshelfArrangedByUserProvidedCriteria() {
         shelf.add(effectiveJava, codeComplete, mythicalManMonth);
-        List<Book> books = shelf.arrange(Comparator.<Book>naturalOrder().reversed());
-        assertEquals(
-                asList(mythicalManMonth, effectiveJava, codeComplete),
-                books,
-                () -> "Books in a bookshelf are arranged in descending order of book title");
+        Comparator<Book> reversed = Comparator.<Book>naturalOrder().reversed();
+        List<Book> books = shelf.arrange(reversed);
+        assertThat(books).isSortedAccordingTo(reversed);
     }
 }
