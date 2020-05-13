@@ -1,7 +1,5 @@
 package bookstoread;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.time.Year;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -11,8 +9,8 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -21,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@ExtendWith(BooksParameterResolver.class)
 class BookShelfSpec
 {
     private BookShelf shelf;
@@ -30,12 +29,12 @@ class BookShelfSpec
     private Book cleanCode;
 
     @BeforeEach
-    void init() throws Exception {
+    void init(Map<String, Book> books) {
         shelf = new BookShelf();
-        effectiveJava = new Book("Effective Java", "Joshua Bloch", LocalDate.of(2008, Month.MAY, 8));
-        codeComplete = new Book("Code Complete", "Steve McConnel", LocalDate.of(2004, Month.JUNE, 9));
-        mythicalManMonth = new Book("The Mythical Man-Month", "Frederick Phillips Brooks", LocalDate.of(1975, Month.JANUARY, 1));
-        cleanCode = new Book("The Lucky One", "Robert C. Martin", LocalDate.of(2008, Month.DECEMBER, 10));
+        this.effectiveJava = books.get("Effective Java");
+        this.codeComplete = books.get("Code Complete");
+        this.mythicalManMonth = books.get("The Mythical Man-Month");
+        this.cleanCode = books.get("Clean Code");
     }
 
     @Test
@@ -136,40 +135,4 @@ class BookShelfSpec
                 .containsKey("Robert C. Martin")
                 .containsValues(singletonList(cleanCode));
     }
-
-    @Nested
-    @DisplayName("is empty")
-    class IsEmpty {
-
-        @Test
-        @DisplayName("when no book is added to it")
-        public void emptyBookShelfWhenNoBookAdded() {
-            // Test case removed for brevity
-        }
-
-        @Test
-        @DisplayName("when add is called without books")
-        void emptyBookShelfWhenAddIsCalledWithoutBooks() {
-            // Test case removed for brevity
-        }
-
-    }
-
-    @Nested
-    @DisplayName("after adding books")
-    class BooksAreAdded {
-
-        @Test
-        @DisplayName("contains two books")
-        void bookshelfContainsTwoBooksWhenTwoBooksAdded() {
-            // Test case removed for brevity
-        }
-
-        @Test
-        @DisplayName("returns an immutable books collection to client")
-        void bookshelfIsImmutableForClient() {
-            // Test case removed for brevity
-        }
-    }
-
 }
