@@ -41,7 +41,7 @@ public class BookShelfSpecWithRules {
         shelf.add(effectiveJava, codeComplete);
     }
 
-    @RepeatedTest(10)
+    @RepeatedTest(value = 10, name = "i_am_a_repeated_test__{currentRepetition}/{totalRepetitions}")
     void i_am_a_repeated_test() {
         assertTrue(true);
     }
