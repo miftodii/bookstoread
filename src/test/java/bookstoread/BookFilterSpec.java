@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,19 +44,30 @@ class BookFilterSpec {
 
     @Test
     @DisplayName("Composite criteria does not invoke after first failure")
-    void shouldNotInvokeAfterFirstFailure(){
+    void shouldNotInvokeAfterFirstFailure() {
         CompositeFilter compositeFilter = new CompositeFilter();
-        compositeFilter.addFilter( b -> false);
-        compositeFilter.addFilter( b -> true);
+
+        BookFilter invokedMockedFilter = Mockito.mock(BookFilter.class);
+        Mockito.when(invokedMockedFilter.apply(cleanCode)).thenReturn(false);
+        compositeFilter.addFilter(invokedMockedFilter);
+
         assertFalse(compositeFilter.apply(cleanCode));
+        Mockito.verify(invokedMockedFilter).apply(cleanCode);
     }
 
     @Test
     @DisplayName("Composite criteria invokes all filters")
-    void shouldInvokeAllFilters(){
+    void shouldInvokeAllFilters() {
         CompositeFilter compositeFilter = new CompositeFilter();
-        compositeFilter.addFilter( b -> true);
-        compositeFilter.addFilter( b -> true);
+        BookFilter firstInvokedMockedFilter = Mockito.mock(BookFilter.class);
+        Mockito.when(firstInvokedMockedFilter.apply(cleanCode)).thenReturn(true);
+        compositeFilter.addFilter(firstInvokedMockedFilter);
+
+        BookFilter secondInvokedMockedFilter = Mockito.mock(BookFilter.class);
+        Mockito.when(secondInvokedMockedFilter.apply(cleanCode)).thenReturn(true);
+        compositeFilter.addFilter(secondInvokedMockedFilter);
         assertTrue(compositeFilter.apply(cleanCode));
+        Mockito.verify(firstInvokedMockedFilter).apply(cleanCode);
+        Mockito.verify(secondInvokedMockedFilter).apply(cleanCode);
     }
 }
