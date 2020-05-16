@@ -2,7 +2,6 @@ package bookstoread;
 
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -27,14 +26,15 @@ public class BookShelf
         return Collections.unmodifiableList(books);
     }
 
-    public void add(Book... booksToAdd)
+    public void add(Book... booksToAdd) throws BookShelfCapacityReached
     {
-        Arrays.stream(booksToAdd).forEach(book -> {
+        for (Book book : booksToAdd)
+        {
             if (books.size() == capacity) {
                 throw new BookShelfCapacityReached(String.format("BookShelf capacity of %d is reached. You can't add more books.", this.capacity));
             }
             books.add(book);
-        });
+        }
     }
 
     public List<Book> arrange()

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
 import org.junit.rules.ExpectedException;
 
-@ExtendWith(BooksParameterResolver.class)
-@EnableRuleMigrationSupport
+@ExtendWith({BooksParameterResolver.class, LoggingTestExecutionExceptionHandler.class})
+//@EnableRuleMigrationSupport
 public class BookShelfSpecWithRules {
 
     private BookShelf shelf;
@@ -29,7 +29,9 @@ public class BookShelfSpecWithRules {
     }
 
     @Test
-    void throwsExceptionWhenBooksAreAddedAfterCapacityIsReached() {
+    void throwsExceptionWhenBooksAreAddedAfterCapacityIsReached()
+            throws BookShelfCapacityReached
+    {
         shelf = new BookShelf(1);
         expectedException.expect(BookShelfCapacityReached.class);
         expectedException.expectMessage("BookShelf capacity of 1 is reached. You can't add more books.");

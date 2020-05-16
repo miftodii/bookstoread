@@ -1,6 +1,6 @@
 package bookstoread;
 
-public class BookShelfCapacityReached extends RuntimeException
+public class BookShelfCapacityReached extends Throwable
 {
     public BookShelfCapacityReached(String format)
     {

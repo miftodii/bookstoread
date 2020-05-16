@@ -22,7 +22,8 @@ public class BookShelfProgressSpec {
     private Book refactoring;
 
     @BeforeEach
-    void init(Map<String, Book> books) {
+    void init(Map<String, Book> books) throws BookShelfCapacityReached
+    {
         shelf = new BookShelf(6);
         effectiveJava = books.get("Effective Java");
         cleanCode = books.get("Clean Code");
