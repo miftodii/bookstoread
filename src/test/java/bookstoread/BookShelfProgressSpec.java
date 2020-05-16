@@ -23,7 +23,7 @@ public class BookShelfProgressSpec {
 
     @BeforeEach
     void init(Map<String, Book> books) {
-        shelf = new BookShelf();
+        shelf = new BookShelf(6);
         effectiveJava = books.get("Effective Java");
         cleanCode = books.get("Clean Code");
         mythicalManMonth = books.get("The Mythical Man-Month");

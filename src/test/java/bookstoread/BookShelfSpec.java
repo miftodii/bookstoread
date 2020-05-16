@@ -18,6 +18,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -32,7 +33,7 @@ class BookShelfSpec
 
     @BeforeEach
     void init(Map<String, Book> books) {
-        shelf = new BookShelf();
+        shelf = new BookShelf(5);
         this.effectiveJava = books.get("Effective Java");
         this.codeComplete = books.get("Code Complete");
         this.mythicalManMonth = books.get("The Mythical Man-Month");
@@ -46,21 +47,26 @@ class BookShelfSpec
     }
 
     @Test
-    public void bookshelfContainsTwoBooksWhenTwoBooksAdded() {
+    public void bookshelfContainsTwoBooksWhenTwoBooksAdded()
+            throws BookShelfCapacityReached
+    {
         shelf.add(effectiveJava, codeComplete);
         List<Book> books = shelf.books();
         assertEquals(2, books.size(), () -> "BookShelf should have two books.");
     }
 
     @Test
-    public void emptyBookShelfWhenAddIsCalledWithoutBooks() {
+    public void emptyBookShelfWhenAddIsCalledWithoutBooks() throws BookShelfCapacityReached
+    {
         shelf.add();
         List<Book> books = shelf.books();
         assertTrue(books.isEmpty(), () -> "BookShelf should be empty.");
     }
 
     @Test
-    public void booksReturnedFromBookShelfIsImmutableForClient() {
+    public void booksReturnedFromBookShelfIsImmutableForClient()
+            throws BookShelfCapacityReached
+    {
         shelf.add(effectiveJava, codeComplete);
         List<Book> books = shelf.books();
         try {
@@ -73,14 +79,17 @@ class BookShelfSpec
 
     @Disabled("Needs to implement Comparator")
     @Test
-    void bookshelfArrangedByBookTitle() {
+    void bookshelfArrangedByBookTitle() throws BookShelfCapacityReached
+    {
         shelf.add(effectiveJava, codeComplete, mythicalManMonth);
         List<Book> books = shelf.arrange();
         assertEquals(asList(codeComplete, effectiveJava, mythicalManMonth), books, () -> "Books in a bookshelf should be arranged lexicographically by book title");
     }
 
     @Test
-    void booksInBookShelfAreInInsertionOrderAfterCallingArrange() {
+    void booksInBookShelfAreInInsertionOrderAfterCallingArrange()
+            throws BookShelfCapacityReached
+    {
         shelf.add(effectiveJava, codeComplete, mythicalManMonth);
         shelf.arrange();
         List<Book> books = shelf.books();
@@ -88,7 +97,8 @@ class BookShelfSpec
     }
 
     @Test
-    void bookshelfArrangedByUserProvidedCriteria() {
+    void bookshelfArrangedByUserProvidedCriteria() throws BookShelfCapacityReached
+    {
         shelf.add(effectiveJava, codeComplete, mythicalManMonth);
         Comparator<Book> reversed = Comparator.<Book>naturalOrder().reversed();
         List<Book> books = shelf.arrange(reversed);
@@ -97,7 +107,8 @@ class BookShelfSpec
 
     @Test
     @DisplayName("books inside bookshelf are grouped by publication year")
-    void groupBooksInsideBookShelfByPublicationYear() {
+    void groupBooksInsideBookShelfByPublicationYear() throws BookShelfCapacityReached
+    {
         shelf.add(effectiveJava, codeComplete, mythicalManMonth, cleanCode);
 
         Map<Year, List<Book>> booksByPublicationYear = shelf.groupByPublicationYear();
@@ -117,7 +128,8 @@ class BookShelfSpec
 
     @Test
     @DisplayName("books inside bookshelf are grouped according to user provided criteria(group by author name)")
-    void groupBooksByUserProvidedCriteria() {
+    void groupBooksByUserProvidedCriteria() throws BookShelfCapacityReached
+    {
         shelf.add(effectiveJava, codeComplete, mythicalManMonth, cleanCode);
         Map<String, List<Book>> booksByAuthor = shelf.groupBy(Book::getAuthor);
 
@@ -142,7 +154,8 @@ class BookShelfSpec
     @DisplayName("search")
     class BookShelfSearchSpec {
         @BeforeEach
-        void setup() {
+        void setup() throws BookShelfCapacityReached
+        {
             shelf.add(codeComplete, effectiveJava, mythicalManMonth, cleanCode);
         }
 
@@ -160,5 +173,15 @@ class BookShelfSpec
                     LocalDate.of(2014, 12, 31)));
             assertThat(books.size()).isEqualTo(2);
         }
+    }
+
+    @Test
+    void throwsExceptionWhenBooksAreAddedAfterCapacityIsReached()
+            throws BookShelfCapacityReached
+    {
+        BookShelf bookShelf = new BookShelf(2);
+        bookShelf.add(effectiveJava, codeComplete);
+        BookShelfCapacityReached throwException = assertThrows(BookShelfCapacityReached.class, () -> bookShelf.add(mythicalManMonth));
+        assertEquals("BookShelf capacity of 2 is reached. You can't add more books.", throwException.getMessage());
     }
 }
