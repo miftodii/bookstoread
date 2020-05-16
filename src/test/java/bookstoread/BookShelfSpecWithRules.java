@@ -1,0 +1,38 @@
+package bookstoread;
+
+import java.util.Map;
+
+import org.junit.Rule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
+import org.junit.rules.ExpectedException;
+
+@ExtendWith(BooksParameterResolver.class)
+@EnableRuleMigrationSupport
+public class BookShelfSpecWithRules {
+
+    private BookShelf shelf;
+    private Book effectiveJava;
+    private Book codeComplete;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @BeforeEach
+    void init(Map<String, Book> books) {
+        this.effectiveJava = books.get("Effective Java");
+        this.codeComplete = books.get("Code Complete");
+
+
+    }
+
+    @Test
+    void throwsExceptionWhenBooksAreAddedAfterCapacityIsReached() {
+        shelf = new BookShelf(1);
+        expectedException.expect(BookShelfCapacityReached.class);
+        expectedException.expectMessage("BookShelf capacity of 1 is reached. You can't add more books.");
+        shelf.add(effectiveJava, codeComplete);
+    }
+}
