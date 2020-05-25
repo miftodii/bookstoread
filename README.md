@@ -33,3 +33,6 @@ The order of execution for a test class which has all extensions and life cycle 
 As mentioned in the JavaDoc of the TestInstancePostProcessor interface, the canonical example of this extension is injecting dependencies into the test instance.
 There are situations in which we would like to control whether we should run a test case or not. JUnit 5 provides the ExecutionCondition extension interface for implementing this use case.
 TestExecutionExceptionHandler extension can be used to alter the behavior of a test when it encounters an exception.
+
+JUnit 5 enables us to create test skeletons which are instantiated with TestTemplateInvocationContext to generate tests at runtime. The generated tests are like @Test method. The templates support the complete test life cycle. Any methods annotated with @BeforeAll/@BeforeEach/@AfterEach/@AfterAll are executed as per life cycle for the generated test.
+A test template is created by marking a non-static method test class with org.junit.jupiter.api.TestTemplate annotation. Additionally, we must register an implementation of TestTemplateInvocationContextProvider Extension, which is used to generate an actual test from the template.
