@@ -29,3 +29,5 @@ The order of execution for a test class which has all extensions and life cycle 
 *AfterEachCallback
 *AfterAll
 *AfterAllCallback 
+
+As mentioned in the JavaDoc of the TestInstancePostProcessor interface, the canonical example of this extension is injecting dependencies into the test instance.
