@@ -31,3 +31,4 @@ The order of execution for a test class which has all extensions and life cycle 
 *AfterAllCallback 
 
 As mentioned in the JavaDoc of the TestInstancePostProcessor interface, the canonical example of this extension is injecting dependencies into the test instance.
+There are situations in which we would like to control whether we should run a test case or not. JUnit 5 provides the ExecutionCondition extension interface for implementing this use case.
